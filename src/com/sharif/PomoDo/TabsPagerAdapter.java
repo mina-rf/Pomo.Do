@@ -26,7 +26,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             case 2:
                 return new StatisticsFragment();
             case 3:
-                return new SettingFragment();
+                return new ToDoListTestFragment();
         }
 
         return null;
