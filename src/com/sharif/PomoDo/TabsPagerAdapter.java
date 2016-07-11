@@ -1,7 +1,9 @@
 package com.sharif.PomoDo;
 
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
 
 /**
  * Created by mina on 7/9/16.
@@ -36,6 +38,11 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
     public int getCount()
     {
         return 4;
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return "Tab" + (position + 1);
     }
 }
 
