@@ -29,7 +29,7 @@ public class TimerService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(" ", "onStartCommand ");
 
-        int time = intent.getIntExtra("time",0);
+        long time = intent.getLongExtra("time",0);
         Intent startIntent = new Intent(this,MainActivity.class);
         PendingIntent pIntent = PendingIntent.getActivity(this,(int)System.currentTimeMillis() , startIntent , 0);
         Notification notif = new Notification.Builder(this)
@@ -43,13 +43,15 @@ public class TimerService extends Service {
 
             @Override
             public void onTick(long l) {
-                myintent.putExtra("counter",String.valueOf(l));
+                myintent.putExtra("counter",l);
                 sendBroadcast(myintent);
                 Log.d(" ", "onTick " + l);
             }
 
             @Override
             public void onFinish() {
+                myintent.putExtra("counter",0);
+                sendBroadcast(myintent);
                 Log.d(" ", "onFinish ");
                 stopSelf();
 
