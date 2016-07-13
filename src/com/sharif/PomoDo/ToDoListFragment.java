@@ -10,18 +10,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by mina on 7/9/16.
  */
 public class ToDoListFragment  extends Fragment implements View.OnClickListener{
 
-    LinearLayout taskList ;
+    ListView taskList ;
     EditText mEditTest;
+
+    List<String> list = new ArrayList<String>();
+    CustomAdapter adapter;
 
     TasksDBHelper tasksDB ;
 
@@ -36,8 +39,11 @@ public class ToDoListFragment  extends Fragment implements View.OnClickListener{
         view= inflater.inflate(R.layout.todolist_layout, container, false);
 
         tasksDB = new TasksDBHelper(getActivity());
-        taskList = (LinearLayout) view.findViewById(R.id.taskList);
+        taskList = (ListView) view.findViewById(R.id.tasks_listView);
         mEditTest = (EditText) view.findViewById((R.id.editText));
+
+        adapter = new CustomAdapter(getActivity(), list);
+
 
         Button addButton = (Button) view.findViewById(R.id.button);
         addButton.setOnClickListener(this);
@@ -59,12 +65,16 @@ public class ToDoListFragment  extends Fragment implements View.OnClickListener{
                 String name = c.getString(c
                         .getColumnIndex(TasksDBHelper.TASK_COLUMN_NAME));
 
-                taskList.addView(createNewTask(name));
+
+                list.add(name);
+                adapter.notifyDataSetChanged();
+
                 c.moveToNext();
             }
         }
 
 
+        taskList.setAdapter(adapter);
         this.setRetainInstance(true);
         return view;
 
