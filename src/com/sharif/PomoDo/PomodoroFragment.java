@@ -1,10 +1,9 @@
 package com.sharif.PomoDo;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.*;
 import android.os.Bundle;
+import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.provider.SyncStateContract;
 import android.support.annotation.Nullable;
 //import android.support.v4.app.Fragment;
@@ -33,8 +32,6 @@ public class PomodoroFragment extends Fragment implements View.OnClickListener {
         if (view.getId() == R.id.button2){
             Log.d("tag", "onClick ");
             getActivity().startService(new Intent(getActivity(),TimerService.class).setAction("").putExtra("time" , total));
-
-
         }
     }
 
@@ -47,7 +44,11 @@ public class PomodoroFragment extends Fragment implements View.OnClickListener {
         timerView = (TimerView) view.findViewById(R.id.timeView);
         button.setOnClickListener(this);
         timerView.setAngle(0);
-        timerView.setTime("15:00");
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        int time = preferences.getInt("work_interval",9);
+        Log.d("time =", ""+time);
+        total = time*60*1000*5;
+        timerView.setTime(getTime(total));
         timerView.invalidate();
         getActivity().registerReceiver(broadcastReceiver,new IntentFilter(TimerService.BROADCAST_TIME));
 
@@ -72,14 +73,14 @@ public class PomodoroFragment extends Fragment implements View.OnClickListener {
         long l = intent.getLongExtra("counter" , 0);
         int angle =360 - (int) (l * 360 / total);
         timerView.setAngle(angle);
-        SimpleDateFormat sdf = new SimpleDateFormat("mm:ss", Locale.getDefault());
-        String out = sdf.format(new Date(l));
-        int min = (int)(l/(1000*60));
-        int second = (int)((l % (60 * 1000))/1000);
-        String out1 = String.format("%02d:%02d",min ,  second);
-        timerView.setTime(out1);
+        timerView.setTime(getTime(l));
         timerView.invalidate();
-//        String l = intent.getStringExtra("counter");
-//        timerView.setAngle();
+    }
+
+    private String getTime(long time){
+        int min = (int)(time/(1000*60));
+        int second = (int)((time % (60 * 1000))/1000);
+        String output = String.format("%02d:%02d",min ,  second);
+        return output;
     }
 }
