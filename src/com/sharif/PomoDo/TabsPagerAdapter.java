@@ -4,6 +4,8 @@ package com.sharif.PomoDo;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.support.v13.app.FragmentPagerAdapter;
+
+import java.util.Arrays;
 //import android.support.v4.app.FragmentManager;
 //import android.support.v4.app.FragmentPagerAdapter;
 
@@ -45,7 +47,8 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return "Tab" + (position + 1);
+        String[] tabs = {"Pomodoro","ToDoList","Statistics","Setting"};
+        return tabs[position];
     }
 }
 

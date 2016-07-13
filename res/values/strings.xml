@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">PomoDo</string>
-    <string name="task_name">Task Name </string>
+    <string name="app_name">Pomo.Do</string>
+    <string name="pomodoro_preferences">Pomodoro Preferences</string>
+    <string name="work_interval">Work Interval:</string>
+    <string name="short_break">Short Break:</string>
+    <string name="long_break">Long Break:</string>
 </resources>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:whatever="http://schemas.android.com/apk/res-auto"
+>
+    <PreferenceCategory
+            android:title="@string/pomodoro_preferences">
+        <com.sharif.PomoDo.NumberPickerPreference
+                android:key="work_interval"
+                android:title="@string/work_interval"
+                android:dialogTitle="@string/work_interval"
+                android:defaultValue="5"
+                whatever:min="4"
+                whatever:max="16"
+        />
+        <com.sharif.PomoDo.NumberPickerPreference
+            android:key="short_break"
+            android:title="@string/short_break"
+            android:dialogTitle="@string/short_break"
+            android:defaultValue="1"
+            whatever:min="1"
+            whatever:max="4"
+            />
+        <com.sharif.PomoDo.NumberPickerPreference
+            android:key="long_break"
+            android:title="@string/long_break"
+            android:dialogTitle="@string/long_break"
+            android:defaultValue="3"
+            whatever:min="3"
+            whatever:max="6"
+            />
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

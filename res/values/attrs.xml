@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="TimerView">
-        <attr name="angle" format="float" ></attr>
-        <attr name="time" format="string"></attr>
+    <declare-styleable name="NumberPickerPreference">
+        <attr name="min" format="integer" ></attr>
+        <attr name="max" format="integer"></attr>
     </declare-styleable>
 </resources>
