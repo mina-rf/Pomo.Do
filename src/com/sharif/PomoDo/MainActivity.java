@@ -12,6 +12,7 @@ import android.os.Bundle;
 //import android.support.v4.app.FragmentActivity;
 //import android.support.v13.view.ViewPager;
 //import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.Window;
@@ -32,7 +33,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        TabsPagerAdapter adapter = new TabsPagerAdapter(getSupportFragmentManager());
+        TabsPagerAdapter adapter = new TabsPagerAdapter(getFragmentManager());
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
     }
