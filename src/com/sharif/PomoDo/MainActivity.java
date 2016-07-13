@@ -2,18 +2,23 @@ package com.sharif.PomoDo;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+//import android.support.v4.app.FragmentActivity;
+//import android.support.v4.view.ViewPager;
+//import android.support.v7.app.AppCompatActivity;
+//import android.support.v4.app.FragmentActivity;
+//import android.support.v13.view.ViewPager;
+//import android.support.v4.view.ViewPager;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class MainActivity extends  FragmentActivity  {
+public class MainActivity extends Activity {
     /**
      * Called when the activity is first created.
      */
@@ -77,6 +82,15 @@ public class MainActivity extends  FragmentActivity  {
         });
     }*/
 
+//
+//    @Override
+//    public boolean dispatchTouchEvent(MotionEvent ev){
+//        Fragment myFragment = getFragmentManager().findFragmentByTag("MY_FRAGMENT_TAG");
+//        myFragment.doSomething();
+//        return super.dispatchTouchEvent(ev);
+//
+//
+//    }ev
 
 
 }

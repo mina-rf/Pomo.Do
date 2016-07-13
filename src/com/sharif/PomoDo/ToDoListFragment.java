@@ -2,8 +2,10 @@ package com.sharif.PomoDo;
 
 import android.app.ActionBar;
 import android.os.Bundle;
+import android.app.Fragment;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+//import android.support.v4.app.Fragment;
+//import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,17 +30,19 @@ public class ToDoListFragment  extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.todolist_layout, container, false);
-        //if (getView() != null) {
-            taskList = (LinearLayout) view.findViewById(R.id.taskList);
-            mEditTest = (EditText) view.findViewById((R.id.editText));
+        Log.d("tag", "onCreateView fragment ");
+        taskList = (LinearLayout) view.findViewById(R.id.taskList);
+        mEditTest = (EditText) view.findViewById((R.id.editText));
 
-            Button addButton = (Button) view.findViewById(R.id.button);
-            addButton.setOnClickListener(this);
-            Log.d("tag : ", "onCreateView ");
-        //}
-
-
-
+        Button addButton = (Button) view.findViewById(R.id.button);
+        addButton.setOnClickListener(this);
+        Log.d("tag : ", "onCreateView ");
+        if (getArguments() != null) {
+            String value = getArguments().getString("taskName");
+            taskList.addView(createNewTask(value));
+            if (value != null)
+                Log.d("value", value);
+        }
         return view;
 
     }
@@ -65,8 +69,22 @@ public class ToDoListFragment  extends Fragment implements View.OnClickListener{
     }
     @Override
     public void onClick(View view) {
+
+        Log.d("inam tag!", "onClick joz button");
         if (view.getId() == R.id.button){
-            taskList.addView(createNewTask(mEditTest.getText().toString()));
+
+//
+            Log.d("inam tag!", "onClick ");
+            NewTaskFragment newFragment = new NewTaskFragment();
+            android.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+            transaction.replace(R.id.container, newFragment);
+            transaction.addToBackStack(null);
+
+            // Commit the transaction
+            transaction.commit();
+
+
         }
 
     }
