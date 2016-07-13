@@ -77,7 +77,7 @@ public class PomodoroFragment extends Fragment implements View.OnClickListener {
         timerView.invalidate();
     }
 
-    private String getTime(long time){
+    public static String getTime(long time){
         int min = (int)(time/(1000*60));
         int second = (int)((time % (60 * 1000))/1000);
         String output = String.format("%02d:%02d",min ,  second);

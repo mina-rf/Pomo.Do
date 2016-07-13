@@ -1,8 +1,6 @@
 package com.sharif.PomoDo;
 
-import android.app.Notification;
-import android.app.PendingIntent;
-import android.app.Service;
+import android.app.*;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.os.IBinder;
@@ -33,8 +31,9 @@ public class TimerService extends Service {
         Intent startIntent = new Intent(this,MainActivity.class);
         PendingIntent pIntent = PendingIntent.getActivity(this,(int)System.currentTimeMillis() , startIntent , 0);
         Notification notif = new Notification.Builder(this)
+                .setSmallIcon(R.drawable.ic_launcher)
                 .setContentTitle("Service")
-                .setContentText("timer")
+                .setContentText("time:" + PomodoroFragment.getTime(time))
                 .setContentIntent(pIntent)
                 .build();
 
@@ -45,14 +44,15 @@ public class TimerService extends Service {
             public void onTick(long l) {
                 myintent.putExtra("counter",l);
                 sendBroadcast(myintent);
-                Log.d(" ", "onTick " + l);
+                updateNotification(l);
+//                Log.d(" ", "onTick " + l);
             }
 
             @Override
             public void onFinish() {
                 myintent.putExtra("counter",0);
                 sendBroadcast(myintent);
-                Log.d(" ", "onFinish ");
+//                Log.d(" ", "onFinish ");
                 stopSelf();
 
             }
@@ -63,6 +63,26 @@ public class TimerService extends Service {
         return START_STICKY;
     }
 
+    /**
+     * This is the method that can be called to update the Notification
+     */
+    private void updateNotification(long l) {
+
+        Intent startIntent = new Intent(this,MainActivity.class);
+        PendingIntent pIntent = PendingIntent.getActivity(this,(int)System.currentTimeMillis() , startIntent , 0);
+
+        Notification notification = new Notification.Builder(this)
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setContentTitle("Service")
+                .setContentText("remaining time: "+PomodoroFragment.getTime(l))
+                .setContentIntent(pIntent)
+                .build();
+
+
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(MainActivity.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(1337, notification);
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -71,9 +91,6 @@ public class TimerService extends Service {
     @Override
     public void onCreate() {
         myintent  = new Intent(BROADCAST_TIME);
-
-
-
         super.onCreate();
     }
 
