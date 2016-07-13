@@ -1,11 +1,11 @@
 package com.sharif.PomoDo;
 
 import android.app.ActionBar;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
-//import android.support.v4.app.Fragment;
-//import android.support.v4.app.FragmentTransaction;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,26 +23,49 @@ public class ToDoListFragment  extends Fragment implements View.OnClickListener{
     LinearLayout taskList ;
     EditText mEditTest;
 
+    TasksDBHelper tasksDB ;
+
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.todolist_layout, container, false);
-        Log.d("tag", "onCreateView fragment ");
+
+        View view;
+        view= inflater.inflate(R.layout.todolist_layout, container, false);
+
+        tasksDB = new TasksDBHelper(getActivity());
         taskList = (LinearLayout) view.findViewById(R.id.taskList);
         mEditTest = (EditText) view.findViewById((R.id.editText));
 
         Button addButton = (Button) view.findViewById(R.id.button);
         addButton.setOnClickListener(this);
-        Log.d("tag : ", "onCreateView ");
+
         if (getArguments() != null) {
             String value = getArguments().getString("taskName");
-            taskList.addView(createNewTask(value));
+//            taskList.addView(createNewTask(value));
+            tasksDB.insertTask(value , "" , "" , "" , "", "" , "", "" , "", "" , 10 ,0);
+            Cursor c = tasksDB.getPerson(value);
             if (value != null)
                 Log.d("value", value);
         }
+
+        //draw Views
+        Cursor c = tasksDB.getAllPersons();
+        if (c .moveToFirst()) {
+
+            while (c.isAfterLast() == false) {
+                String name = c.getString(c
+                        .getColumnIndex(TasksDBHelper.TASK_COLUMN_NAME));
+
+                taskList.addView(createNewTask(name));
+                c.moveToNext();
+            }
+        }
+
+
+        this.setRetainInstance(true);
         return view;
 
     }
@@ -50,6 +73,12 @@ public class ToDoListFragment  extends Fragment implements View.OnClickListener{
     public void addTask(View view){
 
 
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+
+        super.onSaveInstanceState(outState);
     }
 
     private LinearLayout createNewTask (String text){
@@ -76,12 +105,16 @@ public class ToDoListFragment  extends Fragment implements View.OnClickListener{
 //
             Log.d("inam tag!", "onClick ");
             NewTaskFragment newFragment = new NewTaskFragment();
-            android.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
+//            tasksDB.insertTask(mEditTest.getText().toString() , "" , "" , "" , "", "" , "", "" , "", "" , 10 ,0);
+//            Cursor c = tasksDB.getPerson(mEditTest.getText().toString());
+//            if(c != null && c.moveToFirst()) {
+//                Log.d("cursor man : ", c.getString(c.getColumnIndex(TasksDBHelper.TASK_COLUMN_NAME)));
+//            }
+
+            android.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
             transaction.replace(R.id.container, newFragment);
             transaction.addToBackStack(null);
-
-            // Commit the transaction
             transaction.commit();
 
 

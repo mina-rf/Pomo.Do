@@ -45,6 +45,8 @@ public class SettingFragment extends PreferenceFragment implements View.OnClickL
     @Override
     public void onClick(View view) {
 
+
+
     }
 
     @Override
