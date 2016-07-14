@@ -2,6 +2,9 @@ package com.sharif.PomoDo;
 
 import android.app.*;
 import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -9,35 +12,29 @@ import android.util.Log;
 
 /**
  * Created by mina on 7/10/16.
+ * Completed by melika :)
  */
 public class TimerService extends Service {
 
     public static final String BROADCAST_TIME = "com.sharif.PomoDo.displayevent";
     Intent myintent;
     CountDownTimer timer;
+    boolean isBreak;
     int counter = 0;
 
     @Override
     public void onTaskRemoved(Intent rootIntent) {
-
         super.onTaskRemoved(rootIntent);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(" ", "onStartCommand ");
 
         long time = intent.getLongExtra("time",0);
-        Intent startIntent = new Intent(this,MainActivity.class);
-        PendingIntent pIntent = PendingIntent.getActivity(this,(int)System.currentTimeMillis() , startIntent , 0);
-        Notification notif = new Notification.Builder(this)
-                .setSmallIcon(R.drawable.ic_launcher)
-                .setContentTitle("Service")
-                .setContentText("time:" + PomodoroFragment.getTime(time))
-                .setContentIntent(pIntent)
-                .build();
+        isBreak = intent.getBooleanExtra("isBreak",false);
 
-
+        Notification notif = getNotification("remaining time: "+PomodoroFragment.getTime(time), null);
+        ((NotificationManager)getSystemService(MainActivity.NOTIFICATION_SERVICE)).cancel(1338);
         timer = new CountDownTimer(time , 1000) {
 
             @Override
@@ -45,14 +42,15 @@ public class TimerService extends Service {
                 myintent.putExtra("counter",l);
                 sendBroadcast(myintent);
                 updateNotification(l);
-//                Log.d(" ", "onTick " + l);
             }
 
             @Override
             public void onFinish() {
-                myintent.putExtra("counter",0);
+                myintent.putExtra("counter",0L);
+                isBreak = !isBreak;
+                myintent.putExtra("isBreak",isBreak);
                 sendBroadcast(myintent);
-//                Log.d(" ", "onFinish ");
+                finishedNotification();
                 stopSelf();
 
             }
@@ -63,22 +61,39 @@ public class TimerService extends Service {
         return START_STICKY;
     }
 
+    private Notification getNotification(String text, Uri sound) {
+        Intent startIntent = new Intent(this,MainActivity.class);
+        startIntent.putExtra("salam",isBreak);
+        PendingIntent pIntent = PendingIntent.getActivity(this,(int)System.currentTimeMillis() , startIntent , PendingIntent.FLAG_UPDATE_CURRENT);
+        return new Notification.Builder(this)
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setContentTitle("Pomo.Do")
+                .setContentText(text)
+                .setContentIntent(pIntent)
+                .setSound(sound)
+                .build();
+    }
+
+    private void finishedNotification() {
+
+        Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        if (alarmUri == null) {
+            alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        }
+
+        Notification notification = getNotification("Time to take a break!", alarmUri);
+
+        notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(MainActivity.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(1338, notification);
+    }
+
     /**
      * This is the method that can be called to update the Notification
      */
     private void updateNotification(long l) {
 
-        Intent startIntent = new Intent(this,MainActivity.class);
-        PendingIntent pIntent = PendingIntent.getActivity(this,(int)System.currentTimeMillis() , startIntent , 0);
-
-        Notification notification = new Notification.Builder(this)
-                .setSmallIcon(R.drawable.ic_launcher)
-                .setContentTitle("Service")
-                .setContentText("remaining time: "+PomodoroFragment.getTime(l))
-                .setContentIntent(pIntent)
-                .build();
-
-
+        Notification notification = getNotification("remaining time: "+PomodoroFragment.getTime(l), null);
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(MainActivity.NOTIFICATION_SERVICE);
         mNotificationManager.notify(1337, notification);
     }

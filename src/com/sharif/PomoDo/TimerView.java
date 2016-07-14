@@ -66,7 +66,7 @@ public class TimerView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        Log.d("TAG", "onDraw ");
+//        Log.d("TAG", "onDraw ");
 
 //        super.onDraw(canvas);
         Paint p = new Paint();
@@ -94,7 +94,7 @@ public class TimerView extends View {
         textPaint.setTextSize(size);
         canvas.drawText(time, width / 2, height / 2 + size / 4, textPaint);
 //        canvas.drawText("salam",50 , 50 , p);
-        Log.d("TAG", "onDraw end ");
+//        Log.d("TAG", "onDraw end ");
 
     }
 

@@ -13,6 +13,7 @@ import android.os.Bundle;
 //import android.support.v13.view.ViewPager;
 //import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.Window;
@@ -27,6 +28,7 @@ public class MainActivity extends Activity {
     private ViewPager viewPager;
     private ActionBar actionBar;
     private TabsPagerAdapter mAdapter;
+    private  boolean b;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,7 @@ public class MainActivity extends Activity {
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
     }
+
 /*
     @Override
     public void onCreate(Bundle savedInstanceState) {

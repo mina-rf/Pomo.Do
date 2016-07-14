@@ -30,5 +30,17 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory>
+        <CheckBoxPreference
+                android:key="playing"
+                android:title="play sound"
+                android:defaultValue="true"
+        />
+        <RingtonePreference
+                android:key="ringtone"
+                android:title="ringtone"
+                android:dependency="playing"
+        />
+    </PreferenceCategory>
 
 </PreferenceScreen>
