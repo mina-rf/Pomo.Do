@@ -9,20 +9,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
 
-/**
- * Created by soham on 3/5/15.
- */
 public class CustomAdapter extends BaseAdapter {
     Context context;
     LayoutInflater layoutInflater;
-    List textitems;
+    List<TaskHolder> textitems;
 
-    public CustomAdapter(Context context, List<String> list) {
+    public CustomAdapter(Context context, List<TaskHolder> list) {
         super();
         this.textitems = list;
         this.context = context;
@@ -53,20 +50,27 @@ public class CustomAdapter extends BaseAdapter {
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = layoutInflater.inflate(R.layout.list, null);
-            holder.textView = (TextView) convertView.findViewById(R.id.text1);
-            holder.imageView = (ImageView) convertView.findViewById(R.id.delete);
+
+            holder.taskName = (TextView) convertView.findViewById(R.id.task_name_inlist);
+            holder.targetAndDone = (TextView) convertView.findViewById(R.id.task_target_done);
+            holder.start = (Button) convertView.findViewById(R.id.task_start);
+            holder.label = (Button) convertView.findViewById(R.id.task_label);
+
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.textView.setText(textitems.get(position).toString());
-        holder.imageView.setImageResource(R.drawable.deleteicon);
-        holder.textView.setTag(String.valueOf(position));
+
+        holder.taskName.setText(textitems.get(position).taskName);
+        holder.targetAndDone.setText(textitems.get(position).done + " / " + textitems.get(position).target);
+        holder.label.setBackgroundColor(textitems.get(position).color);
         return convertView;
     }
 
     class ViewHolder {
-        TextView textView;
-        ImageView imageView;
+        TextView taskName;
+        TextView targetAndDone;
+        Button start;
+        Button label;
     }
 }

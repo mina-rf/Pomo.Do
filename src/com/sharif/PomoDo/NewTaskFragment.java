@@ -96,7 +96,7 @@ public class NewTaskFragment extends Fragment implements View.OnClickListener{
             bundle.putString(TasksDBHelper.TASK_COLUMN_DEADLINE_DAY , String.valueOf(deadLineDay.getValue()));
             bundle.putString(TasksDBHelper.TASK_COLUMN_DEADLINE_HOUR , String.valueOf(deadLineHour.getValue()));
             bundle.putString(TasksDBHelper.TASK_COLUMN_DEADLINE_MINUTE , String.valueOf(deadLineMinute.getValue()));
-            bundle.putString(TasksDBHelper.TASK_COLUMN_TTARGET , String.valueOf(target.getText()));
+            bundle.putString(TasksDBHelper.TASK_COLUMN_TARGET , String.valueOf(target.getText()));
             bundle.putString(TasksDBHelper.TASK_COLUMN_TAG , String.valueOf(tagSpinner.getSelectedItem()));
             bundle.putString(TasksDBHelper.TASK_COLUMN_DESCRIPTION , String.valueOf(description.getText()));
 

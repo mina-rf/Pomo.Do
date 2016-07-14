@@ -5,22 +5,23 @@
               android:layout_height="wrap_content"
               android:orientation="horizontal">
 
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/task_label"/>
     <TextView
-            android:id="@+id/text1"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:textAppearance="?android:attr/textAppearanceListItemSmall" />
-
-    <ImageView
-            android:id="@+id/delete"
-            android:layout_width="0dp"
+            android:text="New Text"
+            android:id="@+id/task_name_inlist"/>
+    <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginTop="10dp"
-            android:layout_weight=".5"
-            android:src="@drawable/deleteicon"
-            android:visibility="invisible" />
+            android:text="New Text"
+            android:id="@+id/task_target_done"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="start"
+            android:id="@+id/task_start"/>
 </LinearLayout>

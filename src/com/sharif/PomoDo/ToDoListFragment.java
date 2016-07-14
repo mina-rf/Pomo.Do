@@ -23,7 +23,7 @@ public class ToDoListFragment  extends Fragment implements View.OnClickListener{
     ListView taskList ;
     EditText mEditTest;
 
-    List<String> list = new ArrayList<String>();
+    List<TaskHolder> list = new ArrayList<TaskHolder>();
     CustomAdapter adapter;
 
     TasksDBHelper tasksDB ;
@@ -40,21 +40,13 @@ public class ToDoListFragment  extends Fragment implements View.OnClickListener{
 
         tasksDB = new TasksDBHelper(getActivity());
         taskList = (ListView) view.findViewById(R.id.tasks_listView);
-        mEditTest = (EditText) view.findViewById((R.id.editText));
-
         adapter = new CustomAdapter(getActivity(), list);
-
 
         Button addButton = (Button) view.findViewById(R.id.button);
         addButton.setOnClickListener(this);
 
         if (getArguments() != null) {
-            String value = getArguments().getString("taskName");
-//            taskList.addView(createNewTask(value));
-            tasksDB.insertTask(value , "" , "" , "" , "", "" , "", "" , "", "" , 10 ,0);
-            Cursor c = tasksDB.getPerson(value);
-            if (value != null)
-                Log.d("value", value);
+            addNewTaskToDB(getArguments());
         }
 
         //draw Views
@@ -62,11 +54,13 @@ public class ToDoListFragment  extends Fragment implements View.OnClickListener{
         if (c .moveToFirst()) {
 
             while (c.isAfterLast() == false) {
-                String name = c.getString(c
-                        .getColumnIndex(TasksDBHelper.TASK_COLUMN_NAME));
 
-
-                list.add(name);
+                TaskHolder newTask = new TaskHolder();
+                newTask.taskName =c.getString(c.getColumnIndex(TasksDBHelper.TASK_COLUMN_NAME));
+                newTask.target = c.getInt(c.getColumnIndex(TasksDBHelper.TASK_COLUMN_TARGET));
+                newTask.done = 0;
+                newTask.color = c.getInt(c.getColumnIndex(TasksDBHelper.TASK_COLUMN_TAG));
+                list.add(newTask);
                 adapter.notifyDataSetChanged();
 
                 c.moveToNext();
@@ -77,6 +71,21 @@ public class ToDoListFragment  extends Fragment implements View.OnClickListener{
         taskList.setAdapter(adapter);
         this.setRetainInstance(true);
         return view;
+
+    }
+
+    private void addNewTaskToDB(Bundle arguments) {
+
+        tasksDB.insertTask(arguments.getString(TasksDBHelper.TASK_COLUMN_NAME),
+                arguments.getInt(TasksDBHelper.TASK_COLUMN_DEADLINE_YEAR),
+                arguments.getInt(TasksDBHelper.TASK_COLUMN_DEADLINE_MONTH),
+                arguments.getInt(TasksDBHelper.TASK_COLUMN_DEADLINE_DAY),
+                arguments.getInt(TasksDBHelper.TASK_COLUMN_DEADLINE_HOUR),
+                arguments.getInt(TasksDBHelper.TASK_COLUMN_DEADLINE_MINUTE),
+                arguments.getString(TasksDBHelper.TASK_COLUMN_DESCRIPTION),
+                arguments.getInt(TasksDBHelper.TASK_COLUMN_TAG),
+                arguments.getInt(TasksDBHelper.TASK_COLUMN_TARGET),
+                0);
 
     }
 

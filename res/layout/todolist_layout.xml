@@ -11,13 +11,8 @@
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New Button"
+                android:text=" New Task"
                 android:id="@+id/button" android:layout_alignParentTop="true" android:layout_alignParentEnd="true"/>
-        <EditText
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:id="@+id/editText" android:layout_alignBottom="@+id/button"
-                android:layout_toStartOf="@+id/button"/>
         <ListView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

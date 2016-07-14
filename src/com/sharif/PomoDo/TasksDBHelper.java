@@ -19,11 +19,9 @@ public class TasksDBHelper extends SQLiteOpenHelper {
     public static final String TASK_COLUMN_DEADLINE_DAY = "deadline_day";
     public static final String TASK_COLUMN_DEADLINE_HOUR = "deadline_hour";
     public static final String TASK_COLUMN_DEADLINE_MINUTE = "deadline_minute";
-    public static final String TASK_COLUMN_WORK_INTERVAL = "work_intrval";
-    public static final String TASK_COLUMN_SHORT_BREAK = "short_break";
     public static final String TASK_COLUMN_DESCRIPTION = "description";
     public static final String TASK_COLUMN_TAG = "tag";
-    public static final String TASK_COLUMN_TTARGET = "target";
+    public static final String TASK_COLUMN_TARGET = "target";
     public static final String TASK_COLUMN_DONE = "done";
 
 
@@ -35,17 +33,15 @@ public class TasksDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("CREATE TABLE " + TASK_TABLE_NAME + "(" +
                 TASK_COLUMN_NAME + " TEXT PRIMARY KEY, " +
-                TASK_COLUMN_DEADLINE_YEAR + " TEXT, " +
-                TASK_COLUMN_DEADLINE_MONTH + " TEXT, " +
-                TASK_COLUMN_DEADLINE_DAY + " TEXT, " +
-                TASK_COLUMN_DEADLINE_HOUR + " TEXT, " +
-                TASK_COLUMN_DEADLINE_MINUTE + " TEXT, " +
-                TASK_COLUMN_WORK_INTERVAL + " TEXT, " +
-                TASK_COLUMN_SHORT_BREAK + " TEXT, " +
+                TASK_COLUMN_DEADLINE_YEAR + " INTEGER, " +
+                TASK_COLUMN_DEADLINE_MONTH + " INTEGER, " +
+                TASK_COLUMN_DEADLINE_DAY + " INTEGER, " +
+                TASK_COLUMN_DEADLINE_HOUR + " INTEGER, " +
+                TASK_COLUMN_DEADLINE_MINUTE + " INTEGER, " +
                 TASK_COLUMN_DESCRIPTION + " TEXT, " +
-                TASK_COLUMN_TTARGET + " INTEGER, " +
+                TASK_COLUMN_TARGET + " INTEGER, " +
                 TASK_COLUMN_DONE + " INTEGER, " +
-                TASK_COLUMN_TAG + " TEXT)"
+                TASK_COLUMN_TAG + " INTEGER)"
         );
     }
 
@@ -54,9 +50,8 @@ public class TasksDBHelper extends SQLiteOpenHelper {
 
     }
 
-    public boolean insertTask(String name, String deadline_year , String deadline_month , String deadline_day ,
-                              String deadline_hour , String deadline_minute , String work_interval ,
-                              String short_Break , String description , String tag , Integer target  , Integer done) {
+    public boolean insertTask(String name, Integer deadline_year , Integer deadline_month , Integer deadline_day ,
+                              Integer deadline_hour , Integer deadline_minute , String description , Integer tag , Integer target  , Integer done) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
@@ -66,10 +61,8 @@ public class TasksDBHelper extends SQLiteOpenHelper {
         contentValues.put(TASK_COLUMN_DEADLINE_DAY, deadline_day);
         contentValues.put(TASK_COLUMN_DEADLINE_HOUR, deadline_hour);
         contentValues.put(TASK_COLUMN_DEADLINE_MINUTE, deadline_minute);
-        contentValues.put(TASK_COLUMN_WORK_INTERVAL, work_interval);
-        contentValues.put(TASK_COLUMN_SHORT_BREAK, short_Break);
         contentValues.put(TASK_COLUMN_DESCRIPTION, description);
-        contentValues.put(TASK_COLUMN_TTARGET, target);
+        contentValues.put(TASK_COLUMN_TARGET, target);
         contentValues.put(TASK_COLUMN_DONE, 0);
         contentValues.put(TASK_COLUMN_TAG, tag);
 
@@ -77,9 +70,9 @@ public class TasksDBHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean updateTask (String name, String deadline_year , String deadline_month , String deadline_day ,
-                               String deadline_hour , String deadline_minute , String work_interval ,
-                               String short_Break , String description ,String tag , Integer target  , Integer done) {
+    public boolean updateTask (String name, Integer deadline_year , Integer deadline_month , Integer deadline_day ,
+                               Integer deadline_hour , Integer deadline_minute , Integer work_interval ,
+                               Integer short_Break , String description , Integer tag , Integer target  , Integer done) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(TASK_COLUMN_NAME, name);
@@ -88,10 +81,8 @@ public class TasksDBHelper extends SQLiteOpenHelper {
         contentValues.put(TASK_COLUMN_DEADLINE_DAY, deadline_day);
         contentValues.put(TASK_COLUMN_DEADLINE_HOUR, deadline_hour);
         contentValues.put(TASK_COLUMN_DEADLINE_MINUTE, deadline_minute);
-        contentValues.put(TASK_COLUMN_WORK_INTERVAL, work_interval);
-        contentValues.put(TASK_COLUMN_SHORT_BREAK, short_Break);
         contentValues.put(TASK_COLUMN_DESCRIPTION, description);
-        contentValues.put(TASK_COLUMN_TTARGET, target);
+        contentValues.put(TASK_COLUMN_TARGET, target);
         contentValues.put(TASK_COLUMN_DONE, done);
         contentValues.put(TASK_COLUMN_TAG, tag);
         db.update(TASK_TABLE_NAME, contentValues, TASK_COLUMN_NAME + " = ? ", new String[] { name } );
