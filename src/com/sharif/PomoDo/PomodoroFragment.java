@@ -81,7 +81,8 @@ public class PomodoroFragment extends Fragment implements View.OnClickListener {
         if( angle == 360){
             isBreak = intent.getBooleanExtra("isBreak",false);
             System.out.println("break "+isBreak);
-            Toast.makeText(getActivity(),"Time to take a break", Toast.LENGTH_LONG).show();
+            if(isBreak)
+                Toast.makeText(getActivity(),"Time to take a break", Toast.LENGTH_LONG).show();
         }
         drawTimer(l, angle);
     }
