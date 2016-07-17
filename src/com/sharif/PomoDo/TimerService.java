@@ -2,11 +2,13 @@ package com.sharif.PomoDo;
 
 import android.app.*;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.CountDownTimer;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -30,26 +32,26 @@ public class TimerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        long time = intent.getLongExtra("time",0);
-        isBreak = intent.getBooleanExtra("isBreak",false);
+        long time = intent.getLongExtra("time", 0);
+        isBreak = intent.getBooleanExtra("isBreak", false);
         num = intent.getIntExtra("num", 0);
 
-        Notification notif = getNotification("remaining time: "+PomodoroFragment.getTime(time), null);
-        ((NotificationManager)getSystemService(MainActivity.NOTIFICATION_SERVICE)).cancel(1338);
-        timer = new CountDownTimer(time , 1000) {
+        Notification notif = getNotification("remaining time: " + PomodoroFragment.getTime(time), null);
+        ((NotificationManager) getSystemService(MainActivity.NOTIFICATION_SERVICE)).cancel(1338);
+        timer = new CountDownTimer(time, 1000) {
 
             @Override
             public void onTick(long l) {
-                myintent.putExtra("counter",l);
+                myintent.putExtra("counter", l);
                 sendBroadcast(myintent);
                 updateNotification(l);
             }
 
             @Override
             public void onFinish() {
-                myintent.putExtra("counter",0L);
+                myintent.putExtra("counter", 0L);
                 isBreak = !isBreak;
-                myintent.putExtra("isBreak",isBreak);
+                myintent.putExtra("isBreak", isBreak);
                 sendBroadcast(myintent);
                 finishedNotification();
                 stopSelf();
@@ -57,16 +59,16 @@ public class TimerService extends Service {
             }
         }.start();
 
-        startForeground(1337,notif);
+        startForeground(1337, notif);
 
         return START_STICKY;
     }
 
     private Notification getNotification(String text, Uri sound) {
-        Intent startIntent = new Intent(this,MainActivity.class);
-        startIntent.putExtra("salam",isBreak);
-        startIntent.putExtra("num",num);
-        PendingIntent pIntent = PendingIntent.getActivity(this,(int)System.currentTimeMillis() , startIntent , PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent startIntent = new Intent(this, MainActivity.class);
+        startIntent.putExtra("salam", isBreak);
+        startIntent.putExtra("num", num);
+        PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), startIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         return new Notification.Builder(this)
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setContentTitle("Pomo.Do")
@@ -78,12 +80,21 @@ public class TimerService extends Service {
 
     private void finishedNotification() {
 
-        Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-        if (alarmUri == null) {
-            alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        }
+        SharedPreferences getAlarms = PreferenceManager.
+                getDefaultSharedPreferences(getBaseContext());
+        Uri uri = null;
 
-        Notification notification = getNotification("Time to take a break!", alarmUri);
+        if (getAlarms.getBoolean("playing", true)) {
+            String alarms = getAlarms.getString("ringtone", "default ringtone");
+            System.out.println(alarms);
+            uri = Uri.parse(alarms);
+        }
+//        Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+//        if (alarmUri == null) {
+//            alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//        }
+
+        Notification notification = getNotification("Time to take a break!", uri);
 
         notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(MainActivity.NOTIFICATION_SERVICE);
@@ -92,7 +103,7 @@ public class TimerService extends Service {
 
     private void updateNotification(long l) {
 
-        Notification notification = getNotification("remaining time: "+PomodoroFragment.getTime(l), null);
+        Notification notification = getNotification("remaining time: " + PomodoroFragment.getTime(l), null);
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(MainActivity.NOTIFICATION_SERVICE);
         mNotificationManager.notify(1337, notification);
     }
@@ -104,7 +115,7 @@ public class TimerService extends Service {
 
     @Override
     public void onCreate() {
-        myintent  = new Intent(BROADCAST_TIME);
+        myintent = new Intent(BROADCAST_TIME);
         super.onCreate();
     }
 

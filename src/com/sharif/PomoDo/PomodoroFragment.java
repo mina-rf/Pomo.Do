@@ -44,6 +44,7 @@ public class PomodoroFragment extends Fragment implements View.OnClickListener {
         getActivity().registerReceiver(broadcastReceiver, new IntentFilter(TimerService.BROADCAST_TIME));
         isBreak = getActivity().getIntent().getBooleanExtra("salam", false);
         breaksNum = getActivity().getIntent().getIntExtra("num",0);
+
     }
 
     @Nullable
@@ -58,9 +59,7 @@ public class PomodoroFragment extends Fragment implements View.OnClickListener {
 
         //read the value of Pomodoro from Shared Preferences
         setValues();
-
         breakOrWork();
-
         return view;
 
     }

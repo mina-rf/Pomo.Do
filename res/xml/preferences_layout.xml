@@ -48,6 +48,8 @@
         <RingtonePreference
                 android:key="ringtone"
                 android:title="ringtone"
+                android:showDefault="true"
+                android:ringtoneType="alarm"
                 android:dependency="playing"
         />
     </PreferenceCategory>
