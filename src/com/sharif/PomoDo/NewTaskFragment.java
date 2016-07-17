@@ -108,15 +108,15 @@ public class NewTaskFragment extends Fragment implements AdapterView.OnItemSelec
 
             ToDoListFragment fragment = new ToDoListFragment();
             Bundle bundle = new Bundle();
+
             bundle.putString(TasksDBHelper.TASK_COLUMN_NAME , name.getText().toString());
-            bundle.putString(TasksDBHelper.TASK_COLUMN_NAME , name.getText().toString());
-            bundle.putString(TasksDBHelper.TASK_COLUMN_DEADLINE_YEAR , String.valueOf(deadLineYear.getValue()));
-            bundle.putString(TasksDBHelper.TASK_COLUMN_DEADLINE_MONTH , String.valueOf(deadLineMonth.getValue()));
-            bundle.putString(TasksDBHelper.TASK_COLUMN_DEADLINE_DAY , String.valueOf(deadLineDay.getValue()));
-            bundle.putString(TasksDBHelper.TASK_COLUMN_DEADLINE_HOUR , String.valueOf(deadLineHour.getValue()));
-            bundle.putString(TasksDBHelper.TASK_COLUMN_DEADLINE_MINUTE , String.valueOf(deadLineMinute.getValue()));
-            bundle.putString(TasksDBHelper.TASK_COLUMN_TARGET , String.valueOf(target.getValue()));
-            bundle.putString(TasksDBHelper.TASK_COLUMN_TAG , String.valueOf(tagSpinner.getSelectedItem()));
+            bundle.putInt(TasksDBHelper.TASK_COLUMN_DEADLINE_YEAR , Integer.valueOf(deadLineYear.getValue()));
+            bundle.putInt(TasksDBHelper.TASK_COLUMN_DEADLINE_MONTH , Integer.valueOf(deadLineMonth.getValue()));
+            bundle.putInt(TasksDBHelper.TASK_COLUMN_DEADLINE_DAY , Integer.valueOf(deadLineDay.getValue()));
+            bundle.putInt(TasksDBHelper.TASK_COLUMN_DEADLINE_HOUR , Integer.valueOf(deadLineHour.getValue()));
+            bundle.putInt(TasksDBHelper.TASK_COLUMN_DEADLINE_MINUTE , Integer.valueOf(deadLineMinute.getValue()));
+            bundle.putInt(TasksDBHelper.TASK_COLUMN_TARGET , Integer.valueOf(target.getValue()));
+            bundle.putInt(TasksDBHelper.TASK_COLUMN_TAG , getColor(tagSpinner.getSelectedItem().toString()));
             bundle.putString(TasksDBHelper.TASK_COLUMN_DESCRIPTION , String.valueOf(description.getText()));
 
             fragment.setArguments(bundle);
@@ -185,7 +185,7 @@ public class NewTaskFragment extends Fragment implements AdapterView.OnItemSelec
 
         @Override
         public Object getItem(int i) {
-            return null;
+            return colors.get(i);
         }
 
         @Override

@@ -7,9 +7,7 @@ import android.app.Fragment;
 import android.support.annotation.Nullable;
 
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.*;
 
 import java.util.ArrayList;
@@ -29,6 +27,33 @@ public class ToDoListFragment  extends Fragment implements View.OnClickListener{
     TasksDBHelper tasksDB ;
 
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.add(0 , v.getId(),0,R.string.delete_task);
+
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        AdapterView.AdapterContextMenuInfo info  =  (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        if (item.getTitle().equals((getActivity().getString(R.string.delete_task)))){
+            return true;
+        }
+        else if (item.getTitle().equals((getActivity().getString(R.string.edit_task)))){
+
+            
+            return true;
+
+        }
+        else
+            return super.onContextItemSelected(item);
+
+
+
+    }
 
     @Nullable
     @Override
@@ -70,6 +95,10 @@ public class ToDoListFragment  extends Fragment implements View.OnClickListener{
 
         taskList.setAdapter(adapter);
         this.setRetainInstance(true);
+
+        registerForContextMenu(taskList);
+
+
         return view;
 
     }

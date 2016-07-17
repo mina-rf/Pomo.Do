@@ -5,4 +5,6 @@
     <string name="work_interval">Work Interval:</string>
     <string name="short_break">Short Break:</string>
     <string name="long_break">Long Break:</string>
+    <string name="delete_task">Delete</string>
+    <string name="edit_task">Edit</string>
 </resources>
