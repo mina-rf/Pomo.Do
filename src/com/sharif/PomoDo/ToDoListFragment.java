@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by mina on 7/9/16.
  */
-public class ToDoListFragment  extends Fragment implements View.OnClickListener{
+public class ToDoListFragment  extends Fragment implements View.OnClickListener {
 
     ListView taskList ;
     EditText mEditTest;
@@ -29,8 +29,10 @@ public class ToDoListFragment  extends Fragment implements View.OnClickListener{
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        Log.d("context menu", "onCreateContextMenu ");
         super.onCreateContextMenu(menu, v, menuInfo);
         menu.add(0 , v.getId(),0,R.string.delete_task);
+        Log.d("context menu", "onCreateContextMenu ");
 
     }
 
@@ -44,7 +46,7 @@ public class ToDoListFragment  extends Fragment implements View.OnClickListener{
         }
         else if (item.getTitle().equals((getActivity().getString(R.string.edit_task)))){
 
-            
+
             return true;
 
         }
@@ -96,7 +98,14 @@ public class ToDoListFragment  extends Fragment implements View.OnClickListener{
         taskList.setAdapter(adapter);
         this.setRetainInstance(true);
 
+        taskList.setClickable(true);
         registerForContextMenu(taskList);
+        taskList.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+            public void onCreateContextMenu(ContextMenu menu, View v,
+                                            ContextMenu.ContextMenuInfo menuInfo) {
+                menu.add(0, v.getId(), 1, "Add");
+                menu.add(0, v.getId() , 2,"Remove");
+            }});
 
 
         return view;
@@ -150,15 +159,8 @@ public class ToDoListFragment  extends Fragment implements View.OnClickListener{
         Log.d("inam tag!", "onClick joz button");
         if (view.getId() == R.id.button){
 
-//
             Log.d("inam tag!", "onClick ");
             NewTaskFragment newFragment = new NewTaskFragment();
-
-//            tasksDB.insertTask(mEditTest.getText().toString() , "" , "" , "" , "", "" , "", "" , "", "" , 10 ,0);
-//            Cursor c = tasksDB.getPerson(mEditTest.getText().toString());
-//            if(c != null && c.moveToFirst()) {
-//                Log.d("cursor man : ", c.getString(c.getColumnIndex(TasksDBHelper.TASK_COLUMN_NAME)));
-//            }
 
             android.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
             transaction.replace(R.id.container, newFragment);

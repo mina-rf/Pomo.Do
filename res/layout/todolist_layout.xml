@@ -16,6 +16,6 @@
         <ListView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tasks_listView" android:layout_below="@+id/button"/>
+                android:id="@+id/tasks_listView" android:layout_below="@+id/button" android:clickable="true"/>
     </RelativeLayout>
 </FrameLayout>
