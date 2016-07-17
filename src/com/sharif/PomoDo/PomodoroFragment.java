@@ -1,7 +1,5 @@
 package com.sharif.PomoDo;
 
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.content.*;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -17,7 +15,12 @@ import android.widget.Toast;
 public class PomodoroFragment extends Fragment implements View.OnClickListener {
     Button button;
     TimerView timerView;
-    long totalTime = 10 * 1000;
+    long workTime = 10 * 1000;
+    long shortBreakTime = 5 * 1000;
+    long longBreakTime = 7 * 1000;
+    long time;
+    int breaksInRow = 2;
+    int breaksNum;
     boolean isBreak;
 
     @Override
@@ -27,8 +30,9 @@ public class PomodoroFragment extends Fragment implements View.OnClickListener {
             //TODO: check if another service is running by that time!
             Intent intent = new Intent(getActivity(), TimerService.class);
             intent.setAction("");
-            intent.putExtra("time", totalTime);
+            intent.putExtra("time", time);
             intent.putExtra("isBreak", isBreak);
+            intent.putExtra("num", breaksNum);
             getActivity().startService(intent);
         }
     }
@@ -39,7 +43,7 @@ public class PomodoroFragment extends Fragment implements View.OnClickListener {
         //registering broadcast receiver
         getActivity().registerReceiver(broadcastReceiver, new IntentFilter(TimerService.BROADCAST_TIME));
         isBreak = getActivity().getIntent().getBooleanExtra("salam", false);
-        Log.d("Fragment", "onCreate "+isBreak);
+        breaksNum = getActivity().getIntent().getIntExtra("num",0);
     }
 
     @Nullable
@@ -53,13 +57,21 @@ public class PomodoroFragment extends Fragment implements View.OnClickListener {
         button.setOnClickListener(this);
 
         //read the value of Pomodoro from Shared Preferences
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        int time = preferences.getInt("work_interval", 9);
-//        totalTime = time * 60 * 1000 * 5;
-        drawTimer(totalTime, 0);
+        setValues();
+
+        breakOrWork();
 
         return view;
 
+    }
+
+    private void setValues() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        int time = preferences.getInt("work_interval", 9);
+        int breakT = preferences.getInt("short_break", 2);
+//        breaksInRow = preferences.getInt("breaks_num", 2);
+//        workTime = time * 60 * 1000 * 5;
+//        shortBreakTime = breakT * 60 * 1000 * 5;
     }
 
     @Override
@@ -77,14 +89,30 @@ public class PomodoroFragment extends Fragment implements View.OnClickListener {
 
     private void updateUI(Intent intent) {
         long l = intent.getLongExtra("counter", 0L);
-        int angle = 360 - (int) (l * 360 / totalTime);
-        if( angle == 360){
-            isBreak = intent.getBooleanExtra("isBreak",false);
-            System.out.println("break "+isBreak);
-            if(isBreak)
-                Toast.makeText(getActivity(),"Time to take a break", Toast.LENGTH_LONG).show();
-        }
+        int angle = 360 - (int) ((l/1000 * 1000) * 360 / time);
         drawTimer(l, angle);
+
+        if (angle == 360) {
+            isBreak = intent.getBooleanExtra("isBreak", false);
+            breakOrWork();
+        }
+    }
+
+    private void breakOrWork() {
+        if (isBreak) {
+            breaksNum++;
+            if (breaksNum == breaksInRow) {
+                Toast.makeText(getActivity(), "Time to take a looooonnnnggggg break", Toast.LENGTH_LONG).show();
+                breaksNum = 0;
+                time = longBreakTime;
+            } else {
+                Toast.makeText(getActivity(), "Time to take a break", Toast.LENGTH_LONG).show();
+                time = shortBreakTime;
+            }
+        } else {
+            time = workTime;
+        }
+        drawTimer(time, 0);
     }
 
     private void drawTimer(long time, int angle) {

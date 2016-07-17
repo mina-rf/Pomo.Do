@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:whatever="http://schemas.android.com/apk/res-auto"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
 >
     <PreferenceCategory
             android:title="@string/pomodoro_preferences">
@@ -8,25 +8,34 @@
                 android:title="@string/work_interval"
                 android:dialogTitle="@string/work_interval"
                 android:defaultValue="5"
-                whatever:min="4"
-                whatever:max="16"
+                app:min="20"
+                app:max="80"
         />
         <com.sharif.PomoDo.NumberPickerPreference
             android:key="short_break"
             android:title="@string/short_break"
             android:dialogTitle="@string/short_break"
             android:defaultValue="1"
-            whatever:min="1"
-            whatever:max="4"
+            app:min="3"
+            app:max="10"
             />
         <com.sharif.PomoDo.NumberPickerPreference
             android:key="long_break"
             android:title="@string/long_break"
             android:dialogTitle="@string/long_break"
             android:defaultValue="3"
-            whatever:min="3"
-            whatever:max="6"
+            app:min="15"
+            app:max="30"
             />
+        <com.sharif.PomoDo.NumberPickerPreference
+                android:key="breaks_num"
+                android:title="Long break after:"
+                android:dialogTitle="Long break after:"
+                android:defaultValue="2"
+                app:min="3"
+                app:max="6"
+        />
+
 
     </PreferenceCategory>
 

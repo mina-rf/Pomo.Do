@@ -55,14 +55,14 @@ public class NumberPickerPreference extends DialogPreference {
         FrameLayout dialogView = new FrameLayout(getContext());
         dialogView.addView(picker);
 
-        NumberPicker.Formatter formatter = new NumberPicker.Formatter() {
-            @Override
-            public String format(int value) {
-                int temp = value * 5;
-                return "" + temp;
-            }
-        };
-        picker.setFormatter(formatter);
+//        NumberPicker.Formatter formatter = new NumberPicker.Formatter() {
+//            @Override
+//            public String format(int value) {
+//                int temp = value * 5;
+//                return "" + temp;
+//            }
+//        };
+//        picker.setFormatter(formatter);
 
         return dialogView;
     }

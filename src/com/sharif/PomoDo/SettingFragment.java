@@ -58,7 +58,7 @@ public class SettingFragment extends PreferenceFragment implements View.OnClickL
     public void updatePreference(Preference preference) {
 
         if (preference instanceof NumberPickerPreference) {
-            preference.setTitle(((NumberPickerPreference) preference).getDialogTitle() + " " + ((NumberPickerPreference) preference).getValue()*5  + " min");
+            preference.setTitle(((NumberPickerPreference) preference).getDialogTitle() + " " + ((NumberPickerPreference) preference).getValue()  + " min");
         }
     }
 }

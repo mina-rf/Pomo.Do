@@ -20,7 +20,7 @@ public class TimerService extends Service {
     Intent myintent;
     CountDownTimer timer;
     boolean isBreak;
-    int counter = 0;
+    int num;
 
     @Override
     public void onTaskRemoved(Intent rootIntent) {
@@ -32,6 +32,7 @@ public class TimerService extends Service {
 
         long time = intent.getLongExtra("time",0);
         isBreak = intent.getBooleanExtra("isBreak",false);
+        num = intent.getIntExtra("num", 0);
 
         Notification notif = getNotification("remaining time: "+PomodoroFragment.getTime(time), null);
         ((NotificationManager)getSystemService(MainActivity.NOTIFICATION_SERVICE)).cancel(1338);
@@ -64,6 +65,7 @@ public class TimerService extends Service {
     private Notification getNotification(String text, Uri sound) {
         Intent startIntent = new Intent(this,MainActivity.class);
         startIntent.putExtra("salam",isBreak);
+        startIntent.putExtra("num",num);
         PendingIntent pIntent = PendingIntent.getActivity(this,(int)System.currentTimeMillis() , startIntent , PendingIntent.FLAG_UPDATE_CURRENT);
         return new Notification.Builder(this)
                 .setSmallIcon(R.drawable.ic_launcher)
@@ -88,9 +90,6 @@ public class TimerService extends Service {
         mNotificationManager.notify(1338, notification);
     }
 
-    /**
-     * This is the method that can be called to update the Notification
-     */
     private void updateNotification(long l) {
 
         Notification notification = getNotification("remaining time: "+PomodoroFragment.getTime(l), null);
