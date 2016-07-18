@@ -1,40 +1,49 @@
 package com.sharif.PomoDo;
 
 import android.content.*;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
+import de.greenrobot.event.*;
 
 public class PomodoroFragment extends Fragment implements View.OnClickListener {
     Button button;
     TimerView timerView;
-    long workTime = 10 * 1000;
+    long workTime = 4 * 1000;
     long shortBreakTime = 5 * 1000;
     long longBreakTime = 7 * 1000;
     long time;
     int breaksInRow = 2;
     int breaksNum;
     boolean isBreak;
+    String taskName = null;
+    EventBus bus = EventBus.getDefault();
 
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.button2) {
             //starting the foreground service
             //TODO: check if another service is running by that time!
-            Intent intent = new Intent(getActivity(), TimerService.class);
-            intent.setAction("");
-            intent.putExtra("time", time);
-            intent.putExtra("isBreak", isBreak);
-            intent.putExtra("num", breaksNum);
-            getActivity().startService(intent);
+            startTimerService();
         }
+    }
+
+    private void startTimerService() {
+        Intent intent = new Intent(getActivity(), TimerService.class);
+        intent.setAction("");
+        intent.putExtra("time", time);
+        intent.putExtra("isBreak", isBreak);
+        intent.putExtra("num", breaksNum);
+        getActivity().startService(intent);
     }
 
     @Override
@@ -43,8 +52,16 @@ public class PomodoroFragment extends Fragment implements View.OnClickListener {
         //registering broadcast receiver
         getActivity().registerReceiver(broadcastReceiver, new IntentFilter(TimerService.BROADCAST_TIME));
         isBreak = getActivity().getIntent().getBooleanExtra("salam", false);
-        breaksNum = getActivity().getIntent().getIntExtra("num",0);
+        breaksNum = getActivity().getIntent().getIntExtra("num", 0);
+        bus.register(this);
 
+    }
+
+    public void onEvent(StartTaskEvent event) {
+        System.out.println(event.task);
+        ((ViewPager) getActivity().findViewById(R.id.pager)).setCurrentItem(0);
+        startTimerService();
+        taskName = event.task;
     }
 
     @Nullable
@@ -88,12 +105,19 @@ public class PomodoroFragment extends Fragment implements View.OnClickListener {
 
     private void updateUI(Intent intent) {
         long l = intent.getLongExtra("counter", 0L);
-        int angle = 360 - (int) ((l/1000 * 1000) * 360 / time);
+        int angle = 360 - (int) ((l / 1000 * 1000) * 360 / time);
         drawTimer(l, angle);
 
         if (angle == 360) {
             isBreak = intent.getBooleanExtra("isBreak", false);
             breakOrWork();
+            if (taskName != null) {
+                TasksDBHelper db = new TasksDBHelper(getActivity());
+                db.addDone(taskName);
+                ((ViewPager)getActivity().findViewById(R.id.pager)).getAdapter().notifyDataSetChanged();
+                taskName = null;
+            }
+
         }
     }
 
@@ -127,4 +151,5 @@ public class PomodoroFragment extends Fragment implements View.OnClickListener {
         String output = String.format("%02d:%02d", min, second);
         return output;
     }
+
 }

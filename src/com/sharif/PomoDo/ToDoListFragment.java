@@ -2,10 +2,13 @@ package com.sharif.PomoDo;
 
 import android.app.ActionBar;
 import android.database.Cursor;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
 
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
@@ -30,7 +33,7 @@ public class ToDoListFragment  extends Fragment implements View.OnClickListener 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         Log.d("context menu", "onCreateContextMenu ");
-        super.onCreateContextMenu(menu, v, menuInfo);
+//        super.onCreateContextMenu(menu, v, menuInfo);
         menu.add(0 , v.getId(),0,R.string.delete_task);
         Log.d("context menu", "onCreateContextMenu ");
 
@@ -65,18 +68,31 @@ public class ToDoListFragment  extends Fragment implements View.OnClickListener 
         View view;
         view= inflater.inflate(R.layout.todolist_layout, container, false);
 
+        
         tasksDB = new TasksDBHelper(getActivity());
         taskList = (ListView) view.findViewById(R.id.tasks_listView);
-        adapter = new CustomAdapter(getActivity(), list);
+        adapter = new CustomAdapter(getActivity(), list, new CustomAdapter.ListAdapterListener() {
+            @Override
+            public void onClickAtOKButton(int position) {
+                changePager();
+            }
+        });
 
         Button addButton = (Button) view.findViewById(R.id.button);
         addButton.setOnClickListener(this);
+        Drawable drawable = view.getResources().getDrawable(R.drawable.add);
+        drawable.setBounds(0, 0, 150 ,
+                170);
+        addButton.setCompoundDrawables(null,drawable, null, null); //set drawab
+//        addButton.setFocusable(true);
 
         if (getArguments() != null) {
             addNewTaskToDB(getArguments());
         }
 
+        Log.d("seda shod!", "onCreateView ");
         //draw Views
+        list.removeAll(list);
         Cursor c = tasksDB.getAllPersons();
         if (c .moveToFirst()) {
 
@@ -85,7 +101,7 @@ public class ToDoListFragment  extends Fragment implements View.OnClickListener 
                 TaskHolder newTask = new TaskHolder();
                 newTask.taskName =c.getString(c.getColumnIndex(TasksDBHelper.TASK_COLUMN_NAME));
                 newTask.target = c.getInt(c.getColumnIndex(TasksDBHelper.TASK_COLUMN_TARGET));
-                newTask.done = 0;
+                newTask.done = c.getInt(c.getColumnIndex(TasksDBHelper.TASK_COLUMN_DONE));
                 newTask.color = c.getInt(c.getColumnIndex(TasksDBHelper.TASK_COLUMN_TAG));
                 list.add(newTask);
                 adapter.notifyDataSetChanged();
@@ -100,15 +116,34 @@ public class ToDoListFragment  extends Fragment implements View.OnClickListener 
 
         taskList.setClickable(true);
         registerForContextMenu(taskList);
-        taskList.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-            public void onCreateContextMenu(ContextMenu menu, View v,
-                                            ContextMenu.ContextMenuInfo menuInfo) {
-                menu.add(0, v.getId(), 1, "Add");
-                menu.add(0, v.getId() , 2,"Remove");
-            }});
+//        taskList.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+//            public void onCreateContextMenu(ContextMenu menu, View v,
+//                                            ContextMenu.ContextMenuInfo menuInfo) {
+//                menu.add(0, v.getId(), 1, "Add");
+//                menu.add(0, v.getId() , 2,"Remove");
+//            }});
 
+
+        taskList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                System.out.println("on item long click listener");
+                return false;
+            }
+        });
+        taskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                System.out.println("item clicked!");
+            }
+        });
 
         return view;
+
+    }
+
+    private void changePager() {
+        ((ViewPager)getActivity().findViewById(R.id.pager)).setCurrentItem(0);
 
     }
 
@@ -147,6 +182,8 @@ public class ToDoListFragment  extends Fragment implements View.OnClickListener 
 
 
 
+
+
         LinearLayout layout = new LinearLayout(getActivity());
         layout.setLayoutParams(lparams);
         layout.addView(textView);
@@ -168,6 +205,9 @@ public class ToDoListFragment  extends Fragment implements View.OnClickListener 
             transaction.commit();
 
 
+        }
+        if (view.getId() == R.id.tasks_listView){
+            System.out.println("heeereee");
         }
 
     }
