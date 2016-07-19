@@ -7,12 +7,14 @@ import android.support.annotation.Nullable;
 import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class PomodoroFragment extends Fragment implements View.OnClickListener {
+public class PomodoroFragment extends Fragment implements View.OnClickListener,View.OnTouchListener{
     Button button;
     TimerView timerView;
     long workTime = 10 * 1000;
@@ -35,6 +37,9 @@ public class PomodoroFragment extends Fragment implements View.OnClickListener {
             intent.putExtra("num", breaksNum);
             getActivity().startService(intent);
         }
+        if(view.getId() == R.id.timeView){
+            System.out.println("clicked");
+        }
     }
 
     @Override
@@ -56,7 +61,8 @@ public class PomodoroFragment extends Fragment implements View.OnClickListener {
         timerView = (TimerView) view.findViewById(R.id.timeView);
 
         button.setOnClickListener(this);
-
+        timerView.setOnClickListener(this);
+        timerView.setOnTouchListener(this);
         //read the value of Pomodoro from Shared Preferences
         setValues();
         breakOrWork();
@@ -127,4 +133,22 @@ public class PomodoroFragment extends Fragment implements View.OnClickListener {
         String output = String.format("%02d:%02d", min, second);
         return output;
     }
+
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        int x = timerView.getCenterX();
+        int y = timerView.getCenterY();
+        int r = timerView.getRadious();
+
+        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+
+            if (Math.sqrt((x - motionEvent.getX()) * (x - motionEvent.getX()) + (y - motionEvent.getY()) * (y - motionEvent.getY())) < r) {
+                System.out.println("circle clicked");
+                //TODO: call method declared
+            }
+        }
+        return true;
+    }
+
 }

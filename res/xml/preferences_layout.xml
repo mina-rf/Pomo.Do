@@ -50,6 +50,7 @@
                 android:title="ringtone"
                 android:showDefault="true"
                 android:ringtoneType="alarm"
+                android:persistent="true"
                 android:dependency="playing"
         />
     </PreferenceCategory>

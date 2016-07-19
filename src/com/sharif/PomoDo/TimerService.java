@@ -8,6 +8,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.CountDownTimer;
 import android.os.IBinder;
+import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -16,7 +17,7 @@ import android.util.Log;
  * Created by mina on 7/10/16.
  * Completed by melika :)
  */
-public class TimerService extends Service {
+public class TimerService extends Service implements  SharedPreferences.OnSharedPreferenceChangeListener{
 
     public static final String BROADCAST_TIME = "com.sharif.PomoDo.displayevent";
     Intent myintent;
@@ -81,7 +82,7 @@ public class TimerService extends Service {
     private void finishedNotification() {
 
         SharedPreferences getAlarms = PreferenceManager.
-                getDefaultSharedPreferences(getBaseContext());
+                getDefaultSharedPreferences(getApplicationContext());
         Uri uri = null;
 
         if (getAlarms.getBoolean("playing", true)) {
@@ -123,5 +124,10 @@ public class TimerService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+
     }
 }
