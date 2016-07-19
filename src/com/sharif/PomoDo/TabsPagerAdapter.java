@@ -22,6 +22,11 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
     }
 
     @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
+    }
+
+    @Override
     public Fragment getItem(int index)
     {
         switch (index)
@@ -50,6 +55,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
         String[] tabs = {"Pomodoro","ToDoList","Statistics","Setting"};
         return tabs[position];
     }
+
 }
 
 

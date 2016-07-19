@@ -89,6 +89,26 @@ public class TasksDBHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    public boolean addDone (String name){
+        ContentValues cv = new ContentValues();
+        Cursor c = getPerson(name);
+        if (c .moveToFirst()) {
+            cv.put(TASK_COLUMN_DONE, c.getInt(c.getColumnIndex(TasksDBHelper.TASK_COLUMN_DONE)) + 1);
+            System.out.println("done : " +(c.getInt(c.getColumnIndex(TasksDBHelper.TASK_COLUMN_DONE))));
+        }
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.update(TASK_TABLE_NAME, cv, TASK_COLUMN_NAME + "= ?", new String[] {name});
+
+        c = getPerson(name);
+        if (c .moveToFirst()) {
+            System.out.println("done : " +(c.getInt(c.getColumnIndex(TasksDBHelper.TASK_COLUMN_DONE)) ));
+        }
+        return true;
+    }
+
+
+
     public Cursor getPerson(String name) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery( "SELECT * FROM " + TASK_TABLE_NAME + " WHERE " +
